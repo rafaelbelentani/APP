@@ -26,6 +26,7 @@ const ModalPicker = (props) => {
                 <Text style={styles.text}>
                 {item}
 
+
                 </Text>
             </TouchableOpacity>
 

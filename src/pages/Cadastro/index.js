@@ -1,69 +1,153 @@
 import { fonts } from '@rneui/base';
 import React, { useState } from 'react';
 import { Text, View, Alert, Image, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import { Input, CheckBox } from 'react-native-elements';
+import { Input } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import { ScrollView } from 'react-native-gesture-handler';
 import { TextInputMask } from 'react-native-masked-text';
+import usuarioService from '../../services/UsuarioService';
 
 
 
 export default function Cadastro({navigation}) {
 
   const [email, setEmail] = useState(null)
-  const [password, setPassword] = useState(null)
+  const [senha, setSenha] = useState(null)
   const [nome, setNome] = useState(null)
   const [telefone, setTelefone] = useState(null)
+  const [contrato, setContrato] = useState(null)
+  const [cnpj, setCNPJ] = useState(null)
+  const [filial, setFilial] = useState(null)
+  const [gestor, setGestor] = useState(null)
+  const [telefone_gestor, setTelefoneGestor] = useState(null)
+  const [cliente, setCliente] = useState(null)
   const [isSelected, setSelected] = useState(false)
   const [errorNome, setErrorNome] = useState(null)
   const [errorEmail, setErrorEmail] = useState(null)
   const [errorTelefone, setErrorTelefone] = useState(null)
+  const [errorContrato, setErrorContrato] = useState(null)
+  const [errorCNPJ, setErrorCNPJ] = useState(null)  
   const [errorSenha, setErrorSenha] = useState(null)
+  const [errorFilial, setErrorFilial] = useState(null)
+  const [errorGestor, setErrorGestor] = useState(null)
+  const [errorTelefoneGestor, setErrorTelefoneGestor] = useState(null)
+  const [errorCliente, setErrorCliente] = useState(null)
+  const [isLoading, setLoading] = useState(false)
   
   let telefoneField = null
+  let cnpjField = null
+  let contratoField = null
+  let telefoneGestorField = null
 
   const validar = () => {
     let error = false
     setErrorNome(null)
     setErrorEmail(null)
     setErrorTelefone(null)
+    setErrorContrato(null)
+    setErrorCNPJ(null)
     setErrorSenha(null)
+    setErrorCliente(null)
+    setErrorFilial(null)
+    setErrorGestor(null)
+    setErrorTelefoneGestor(null)
+    
 
     const re = /^(([^<>()\[\]\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-A\-0-9]+\.)+[a-zA-Z]{2,}))$/
      if (nome ==null){
-    setErrorNome("Preencha seu nome corretamente")
+    setErrorNome("Preencha seu Nome corretamente")
     error = true  
     } 
 
   if (!re.test(String(email).toLowerCase())){
-    setErrorEmail("Preencha seu e-mail corretamente")
+    setErrorEmail("Preencha seu E-Mail corretamente")
     error = true  
   } 
   if (!telefoneField.isValid()){
-    setErrorTelefone("Preencha seu telefone corretamente")
+    setErrorTelefone("Preencha seu Telefone corretamente")
     error = true  
   } 
-  if (password ==null){
-    setErrorSenha("Preencha sua senha corretamente")
+
+  if (!contratoField.isValid()){
+    setErrorContrato("Preencha o Contrato corretamente")
+    error = true  
+  } 
+
+  if (!cnpjField.isValid()){
+    setErrorCNPJ("Preencha o CNPJ corretamente")
+    error = true  
+  }   
+
+  if (filial ==null){
+    setErrorFilial("Preencha a Filial corretamente")
+    error = true  
+    } 
+
+    if (gestor ==null){
+      setErrorGestor("Preencha o Gestor corretamente")
+      error = true  
+      } 
+
+      if (!telefoneGestorField.isValid()){
+        setErrorTelefoneGestor("Preencha o Telefone do Gestor corretamente")
+        error = true  
+      } 
+
+
+  if (cliente ==null){
+    setErrorCliente("Preencha o Cliente corretamente")
+    error = true  
+    } 
+
+  if (senha ==null){
+    setErrorSenha("Preencha sua Senha corretamente")
     error = true  
   }
   return !error
   }
 
-  const cadastrar = () => {
+  const salvar = () => {
     if(validar()){
-    navigation.navigate("Pagina Principal")
-    console.log("Salvou")
-    }
-  }
+      setLoading(true)
 
+      let data = {      
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        filial: filial,
+        gestor: gestor,
+        telefone_gestor: telefone_gestor,
+        cliente: cliente,
+        cnpj: cnpj,
+        contrato: contrato,
+        senha: senha,
+      }
+
+    usuarioService.cadastrar(data)
+    .then((response) => {
+      setLoading(false)
+      const titulo = (response.data.status) ? "Sucesso!" : "Erro!"
+      Alert.alert(titulo, response.data.mensagem)
+      console.log(response.data)
+    })
+    .catch((error) => {
+      setLoading(false)
+      Alert.alert("Erro", "Houve um erro inesperado.")
+      console.log(response.data)
+    })
+   
+    }
+    
+  }
 
   return (
     <KeyboardAvoidingView 
     behavior={Platform.OS == "ios" ? "padding": "height"}
     style = {[styles.container]}
-    keyboardVerticalOffset={200}
+    keyboardVerticalOffset={100}
     >
+
+      <ScrollView style={[styles.container2]} contentContainerStyle={styles.container}>
 
          <BackgroundImage
             source={require('../Login/logo.png')}
@@ -71,22 +155,20 @@ export default function Cadastro({navigation}) {
             resizeMode='contain'
              />
 
- <Input  style={styles.containerMask}           
+            <Input  style={styles.containerMask}           
               placeholder= 'Nome'
               onChangeText={value => {
                 setNome(value)
                 setErrorNome(null)
               }}
-              errorMessage={errorNome}
-              
+              errorMessage={errorNome}              
             />
+
             <Input style={styles.containerMask}            
               placeholder= 'E-mail'
               onChangeText={value => setEmail(value)}
               errorMessage={errorEmail}
-            />
-
-            
+            />            
 
             <View style={styles.telefone} >
             <TextInputMask 
@@ -102,68 +184,174 @@ export default function Cadastro({navigation}) {
               } else
               return false
             }
-           }}
-            
+           }}            
             value={telefone}        
             onChangeText={value => setTelefone(value)}
             keyboardType='phone-pad'
             returnKeyType='done'
-
             ref={(ref) => telefoneField = ref}
-            style={styles.maskedInput}
+            style={styles.maskedInput}            
+            />
+            </View>
+
+             <Text style={styles.errorMessage}>{errorTelefone}</Text>
+
+             <Input  style={styles.input}           
+              placeholder= 'Filial'
+              onChangeText={value => {
+                setFilial(value)
+                setErrorFilial(null)
+              }}
+              errorMessage={errorFilial}              
+            />
+
+<Input  style={styles.input}           
+              placeholder= 'Gestor'
+              onChangeText={value => {
+                setGestor(value)
+                setErrorGestor(null)
+              }}
+              errorMessage={errorGestor}              
+            />
+
+<View style={styles.telefone} >
+            <TextInputMask 
+            placeholder='Telefone Gestor'
+            type={'cel-phone'}
+            options={{
+            maskType: 'BRL',
+            withDDD: true,
+            dddMask: '(99) ',
+            validator: function(val, settings){
+              if (val.length == 9){
+                return true
+              } else
+              return false
+            }
+           }}            
+            value={telefone_gestor}        
+            onChangeText={value => setTelefoneGestor(value)}
+            keyboardType='phone-pad'
+            returnKeyType='done'
+            ref={(ref) => telefoneGestorField = ref}
+            style={styles.maskedInput}            
+            />
+            </View>
+
+             <Text style={styles.errorMessage}>{errorTelefoneGestor}</Text>
+
+
+             <Input  style={styles.input}           
+              placeholder= 'Cliente'
+              onChangeText={value => {
+                setCliente(value)
+                setErrorCliente(null)
+              }}
+              errorMessage={errorCliente}              
+            />
+
+
+
+
+
+          <View style={styles.telefone} >
+            <TextInputMask 
+            placeholder='CNPJ'
+            type={'cnpj'}
+            options={{
+            validator: function(val, settings){
+              if (val.length == 9){
+                return true
+              } else
+              return false
+            }
+           }}            
+            value={cnpj}        
+            onChangeText={value => setCNPJ(value)}
+            keyboardType='phone-pad'
+            returnKeyType='done'
+
+            ref={(ref) => cnpjField = ref}
+            style={styles.maskedInput}            
+            />
+            </View>
+
+
+    <Text style={styles.errorMessage}>{errorCNPJ}</Text>
+
+    <View style={styles.telefone} >
+            <TextInputMask 
+            placeholder='Contrato'
+            type={'custom'}
+            options={{ 
+              mask:'A999999',
+               validator: function(val, settings){
+              if (val.length == 7){
+                return true
+              } else
+              return false
+            }
+           }}
             
+            value={contrato}        
+            onChangeText={value => setContrato(value)}
+            keyboardType='default'
+            returnKeyType='done'
+
+            ref={(ref) => contratoField = ref}
+            style={styles.maskedInput}            
             />
             </View>
             
-             <Text style={styles.errorMessage}>{errorTelefone}</Text>
+             <Text style={styles.errorMessage}>{errorContrato}</Text>
 
             <Input 
               placeholder= 'Senha'
               style={styles.input}
               errorMessage={errorSenha}
-              onChangeText={value => setPassword(value)}
+              onChangeText={value => setSenha(value)}
               secureTextEntry={true}
               />   
 
-              <CheckBox 
-                title="Eu aceito os termos de uso"
-                checkedIcon="check" 
-                uncheckedIcon="square-o" 
-                checkedColor='green' 
-                uncheckedColor='red'
-                checked={isSelected}
-                onPress={() => setSelected(!isSelected)}
-              />        
+            { isLoading &&
+            <Text>Carregando...</Text>
+            }
 
 
+              {!isLoading &&
             <TouchableOpacity
              style={styles.cadastrar}
-             onPress={ () => {cadastrar ()} }
+             onPress={ () => {salvar ()} }
             >
             <Text style={styles.botaoText} >Cadastrar</Text>
-
             </TouchableOpacity>
+            }
+            </ScrollView>
             
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-    marginBottom: 50,
-    },
+ 
+
+    container2: {
+      width: '100%',
+      padding: 10, 
+      
+      },
+
+      container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+  
 
     barra: {
       width: "110%",
       padding: 5,
       cadastrar: 'center',
-      marginBottom: -100,
-      
-    
+      marginBottom: -100,   
     },
 
     
@@ -172,7 +360,9 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
-    alignSelf: 'center'
+    marginTop: -30,
+    
+
     },
     
  
@@ -203,7 +393,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'center',
-      marginBottom: 10,
+      marginBottom: 100,
       },
 
     maskedInput: {
@@ -223,7 +413,7 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       marginLeft: 10,
       marginRight: 10,
-      marginTop: 10,
+      marginTop: 0,
       
       },
 
