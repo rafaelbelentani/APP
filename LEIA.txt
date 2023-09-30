@@ -1,0 +1,6 @@
+NPM INSTALL --SAVE TYPEORM MYSQL
+
+MYSQL
+
+ALTER USER 'root'@'localhost' identified with mysql_native_password BY 'ljhm27rafa';
+flush privileges;
