@@ -1,6 +1,14 @@
-NPM INSTALL --SAVE TYPEORM MYSQL
+GITHUB
 
-MYSQL
+Atualizar Repositorio
+git add *
+git commit -m "Atualização"
+git push origin main
 
-ALTER USER 'root'@'localhost' identified with mysql_native_password BY 'ljhm27rafa';
-flush privileges;
+Alteração de arquivos
+git add *
+git commit -m "Alteração"
+git push origin main
+
+Atualizar Projeto
+git pull origin main
