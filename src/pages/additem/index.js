@@ -2,8 +2,7 @@ import { BackgroundImage } from '@rneui/base';
 import { View, StyleSheet } from 'react-native';
 
 export default function AddItem({navigation}) {
-
-    navigation.navigate("Adicionar Item");       
+          
         return (
                 <View style={styles.screen}>  
                 <BackgroundImage

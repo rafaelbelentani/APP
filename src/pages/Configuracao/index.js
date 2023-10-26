@@ -4,17 +4,13 @@ import React, {useState } from 'react';
 import { Text, View, Modal, Dimensions, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
 
 
-export default function Configuracao({navigation}) {
-
-
-    navigation.navigate("Configuração");       
+export default function Configuracao({navigation}) {     
     
     
     const item = () => {
         navigation.navigate("Adicionar Item")
       }
     
-      navigation.navigate("Configuração");
         return (
                 <View style={styles.screen}>  
             

@@ -13,7 +13,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 export default function PedidoAdicional({navigation}) {
-        navigation.navigate("Pedido Adicional");
+        
        
 
         const [currentDateWithMoment, setcurrentDateWithMoment] = useState('') 

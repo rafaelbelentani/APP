@@ -7,7 +7,7 @@ import moment from 'moment';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function Saldocliente({navigation}) {
-        navigation.navigate("Saldo Cliente");
+        
        
 
         const [currentDateWithMoment, setcurrentDateWithMoment] = useState('') 

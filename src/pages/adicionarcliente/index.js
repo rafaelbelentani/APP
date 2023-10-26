@@ -2,9 +2,8 @@ import React, {useState } from 'react';
 import { Text, View, Modal, Dimensions, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
 
 
-export default function Addcliente({navigation}) {
-    
-        navigation.navigate("Adicionar Cliente");
+export default function Addcliente() {
+  
         return (
                 <View style={styles.screen}>  
             

@@ -13,7 +13,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 export default function Contarpecas({navigation}) {
-        navigation.navigate("Contar Peças");
+        
        
 
         const [currentDateWithMoment, setcurrentDateWithMoment] = useState('') 
